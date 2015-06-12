@@ -14,11 +14,5 @@ public class Main {
         System.out.println(  b1.equals( b2) );
         System.out.println(  b1.compareTo( b2 ) == 0 );
 
-        System.out.println( "\u0041" );
-
-        List l = Arrays.asList( new String[]{ "a","b","c","d" } );
-        System.out.println( l.subList( 1,4 ) );
-        Collections.shuffle(l);
-        System.out.println(  l);
     }
 }
