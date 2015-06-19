@@ -6,52 +6,51 @@ package concurrency;
 public class Synchronized {
 
     public static void main(String[] args) {
-        SynchronizedTest test = new SynchronizedTest();
-        CallerA a = new CallerA(test);
+        ShareObject so = new ShareObject();
+        CallerA a = new CallerA(so);
         a.start();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        new CallerB(test).start();
+        new CallerB(so).start();
     }
 
-    static class CallerA extends Thread {
-        private SynchronizedTest test = null;
-        public CallerA( SynchronizedTest test ){
-            this.test = test;
+}
+ class CallerA extends Thread {
+    private ShareObject so = null;
+    public CallerA( ShareObject so ){
+        this.so = so;
+    }
+    @Override
+    public void run() {
+        so.A();
+    }
+}
+
+ class CallerB extends Thread {
+    private ShareObject so = null;
+    public CallerB( ShareObject so ){
+        this.so = so;
+    }
+    @Override
+    public void run() {
+        so.B();
+    }
+}
+
+ class ShareObject {
+    public synchronized void  A(){
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        @Override
-        public void run() {
-            test.A();
-        }
+        System.out.println( "A" );
     }
 
-    static class CallerB extends Thread {
-        private SynchronizedTest test = null;
-        public CallerB( SynchronizedTest test ){
-            this.test = test;
-        }
-        @Override
-        public void run() {
-            test.B();
-        }
+    public synchronized void  B(){
+        System.out.println( "B" );
     }
-
-    static class SynchronizedTest {
-        public synchronized void  A(){
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println( "A" );
-        }
-
-        public synchronized void  B(){
-            System.out.println( "B" );
-        }
-    }
-
 }
